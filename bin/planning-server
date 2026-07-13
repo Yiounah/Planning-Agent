@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+APP_DIR="${ROOT_DIR}/sya_task_scheduler"
+
+HOST="${HOST:-127.0.0.1}"
+PORT="${PORT:-8000}"
+
+python_is_compatible() {
+  "$1" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)' >/dev/null 2>&1
+}
+
+select_python() {
+  if [[ -n "${PYTHON:-}" ]]; then
+    echo "${PYTHON}"
+    return
+  fi
+
+  for candidate in \
+    "${APP_DIR}/.venv313/bin/python" \
+    "${APP_DIR}/.venv/bin/python" \
+    "${ROOT_DIR}/.venv/bin/python" \
+    "python3" \
+    "python"; do
+    if ([[ -x "${candidate}" ]] || command -v "${candidate}" >/dev/null 2>&1) && python_is_compatible "${candidate}"; then
+      echo "${candidate}"
+      return
+    fi
+  done
+
+  echo "No compatible Python runtime found. Use Python 3.11+ or set PYTHON=/path/to/python." >&2
+  exit 1
+}
+
+PYTHON_BIN="$(select_python)"
+
+export PYTHONPATH="${APP_DIR}${PYTHONPATH:+:${PYTHONPATH}}"
+
+cd "${APP_DIR}"
+exec "${PYTHON_BIN}" -m uvicorn app.main:app --host "${HOST}" --port "${PORT}"

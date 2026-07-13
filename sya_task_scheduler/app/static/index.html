@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SYA Task Scheduler</title>
+    <style>
+      :root {
+        --bg: #f5efe3;
+        --bg-strong: #efe1c4;
+        --panel: rgba(255, 252, 245, 0.9);
+        --panel-border: rgba(43, 64, 44, 0.14);
+        --ink: #1d2b1f;
+        --muted: #5c665e;
+        --accent: #166a4a;
+        --accent-soft: #dff2e8;
+        --accent-strong: #0f5137;
+        --warm: #b45c2f;
+        --warm-soft: #f7e2d5;
+        --danger: #8a2d2d;
+        --danger-soft: #f6dddd;
+        --warning: #8d661f;
+        --warning-soft: #f9ebc7;
+        --shadow: 0 18px 60px rgba(37, 31, 22, 0.12);
+        --radius-xl: 24px;
+        --radius-lg: 18px;
+        --radius-md: 14px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.8), transparent 38%),
+          radial-gradient(circle at top right, rgba(181, 92, 47, 0.16), transparent 28%),
+          linear-gradient(180deg, var(--bg) 0%, #f1e8d6 100%);
+      }
+
+      body {
+        padding: 24px;
+      }
+
+      .shell {
+        max-width: 1440px;
+        margin: 0 auto;
+        display: grid;
+        gap: 18px;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, rgba(30, 50, 33, 0.95), rgba(17, 90, 62, 0.92));
+        color: #f8f3ea;
+        border-radius: 28px;
+        padding: 28px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        right: -80px;
+        top: -80px;
+        width: 240px;
+        height: 240px;
+        border-radius: 999px;
+        background: rgba(255, 238, 200, 0.15);
+      }
+
+      .hero h1 {
+        margin: 0 0 10px;
+        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+        font-size: clamp(1.75rem, 4vw, 3.5rem);
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+        max-width: none;
+        white-space: nowrap;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 65ch;
+        color: rgba(248, 243, 234, 0.82);
+      }
+
+      .hero-meta {
+        margin-top: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 999px;
+        padding: 10px 14px;
+        font-size: 0.92rem;
+        background: rgba(255, 255, 255, 0.12);
+        color: inherit;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: currentColor;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 340px minmax(0, 1fr) 340px;
+        gap: 18px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow);
+        min-height: 280px;
+      }
+
+      .panel-inner {
+        padding: 22px;
+      }
+
+      .panel h2 {
+        margin: 0 0 8px;
+        font-size: 1.25rem;
+      }
+
+      .panel-copy {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.55;
+      }
+
+      .stack {
+        display: grid;
+        gap: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 7px;
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      input,
+      select,
+      button {
+        font: inherit;
+      }
+
+      input,
+      select {
+        width: 100%;
+        border: 1px solid rgba(31, 46, 34, 0.14);
+        border-radius: 14px;
+        padding: 13px 14px;
+        background: rgba(255, 255, 255, 0.85);
+        color: var(--ink);
+      }
+
+      button {
+        border: none;
+        border-radius: 14px;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition:
+          transform 140ms ease,
+          box-shadow 140ms ease,
+          opacity 140ms ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+        transform: none;
+      }
+
+      .primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        color: #fffef8;
+        box-shadow: 0 10px 24px rgba(22, 106, 74, 0.24);
+      }
+
+      .secondary {
+        background: rgba(29, 43, 31, 0.08);
+        color: var(--ink);
+      }
+
+      .mini {
+        padding: 8px 10px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+      }
+
+      .mini.done {
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+      }
+
+      .mini.progress {
+        background: var(--warning-soft);
+        color: var(--warning);
+      }
+
+      .mini.blocked {
+        background: var(--danger-soft);
+        color: var(--danger);
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .stat {
+        padding: 14px;
+        border-radius: 18px;
+        background: rgba(22, 106, 74, 0.08);
+      }
+
+      .stat b {
+        display: block;
+        font-size: 1.35rem;
+        margin-bottom: 4px;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .tree-root {
+        display: grid;
+        gap: 14px;
+      }
+
+      .tree-node {
+        position: relative;
+        border-radius: 20px;
+        border: 1px solid rgba(31, 46, 34, 0.1);
+        background: rgba(255, 255, 255, 0.76);
+        padding: 16px;
+      }
+
+      .tree-node::before {
+        content: "";
+        position: absolute;
+        inset: auto auto auto 0;
+        left: 0;
+        top: 16px;
+        bottom: 16px;
+        width: 4px;
+        border-radius: 999px;
+        background: var(--accent);
+        opacity: 0.18;
+      }
+
+      .tree-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .tree-title {
+        margin: 0;
+        font-size: 1.02rem;
+      }
+
+      .tree-desc {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 0.93rem;
+        line-height: 1.5;
+      }
+
+      .tree-meta,
+      .tree-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: 0.8rem;
+      }
+
+      .status-pending {
+        background: rgba(29, 43, 31, 0.08);
+        color: var(--ink);
+      }
+
+      .status-in-progress {
+        background: var(--warning-soft);
+        color: var(--warning);
+      }
+
+      .status-done {
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+      }
+
+      .status-blocked,
+      .status-skipped {
+        background: var(--danger-soft);
+        color: var(--danger);
+      }
+
+      .children {
+        margin-top: 14px;
+        margin-left: 20px;
+        display: grid;
+        gap: 12px;
+        padding-left: 12px;
+        border-left: 1px dashed rgba(29, 43, 31, 0.18);
+      }
+
+      .empty,
+      .event-empty {
+        padding: 24px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.62);
+        border: 1px dashed rgba(31, 46, 34, 0.16);
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .event-log {
+        display: grid;
+        gap: 10px;
+        max-height: 860px;
+        overflow: auto;
+      }
+
+      .event-card {
+        border-radius: 18px;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(31, 46, 34, 0.1);
+      }
+
+      .event-card header {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .event-type {
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--warm);
+      }
+
+      .event-time {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .code {
+        font-family: "SFMono-Regular", "Cascadia Code", ui-monospace, monospace;
+        font-size: 0.82rem;
+      }
+
+      .toast {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        max-width: 320px;
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: rgba(22, 34, 25, 0.92);
+        color: #fffef8;
+        box-shadow: var(--shadow);
+        opacity: 0;
+        transform: translateY(16px);
+        pointer-events: none;
+        transition: opacity 180ms ease, transform 180ms ease;
+      }
+
+      .toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 1180px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        body {
+          padding: 12px;
+        }
+
+        .hero,
+        .panel-inner {
+          padding: 18px;
+        }
+
+        .stats {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="hero">
+        <h1>FocusFlow Planner</h1>
+        <p>
+          Initialize a task plan, inspect the live hierarchy, and watch
+          websocket events land as the backend replans pending work.
+        </p>
+        <div class="hero-meta">
+          <div class="chip">
+            <span class="dot" id="ws-dot"></span>
+            <span id="ws-status">Connecting websocket...</span>
+          </div>
+          <div class="chip">
+            <span>Last event</span>
+            <strong id="last-event">none yet</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <aside class="panel">
+          <div class="panel-inner">
+            <h2>Control Deck</h2>
+            <p class="panel-copy">
+              Start a new planning run or refresh the current tree snapshot from
+              the backend.
+            </p>
+
+            <form id="init-form" class="stack">
+              <label>
+                Goal
+                <input
+                  id="goal"
+                  name="goal"
+                  type="text"
+                  value="Build an AI scheduling backend"
+                  placeholder="What should the planner decompose?"
+                  required
+                />
+              </label>
+
+              <label>
+                Persona
+                <select id="persona" name="persona">
+                  <option value="balanced">balanced</option>
+                  <option value="micro">micro</option>
+                  <option value="macro">macro</option>
+                </select>
+              </label>
+
+              <div class="toolbar">
+                <button class="primary" id="init-button" type="submit">
+                  Initialize Plan
+                </button>
+                <button class="secondary" id="refresh-button" type="button">
+                  Refresh Tree
+                </button>
+              </div>
+            </form>
+
+            <div class="stack" style="margin-top: 18px">
+              <h2 style="margin-bottom: 0">Snapshot</h2>
+              <div class="stats" id="stats">
+                <div class="stat">
+                  <b id="stat-nodes">0</b>
+                  <span class="muted">nodes</span>
+                </div>
+                <div class="stat">
+                  <b id="stat-leaves">0</b>
+                  <span class="muted">leaf tasks</span>
+                </div>
+                <div class="stat">
+                  <b id="stat-pending">0</b>
+                  <span class="muted">pending</span>
+                </div>
+                <div class="stat">
+                  <b id="stat-done">0</b>
+                  <span class="muted">done</span>
+                </div>
+              </div>
+              <div class="empty" id="summary">
+                No task tree yet. Initialize a plan to hydrate this dashboard.
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <main class="panel">
+          <div class="panel-inner">
+            <h2>Task Tree</h2>
+            <p class="panel-copy">
+              Leaf nodes can be updated directly. The page refetches the tree
+              whenever a task mutation or replanning event arrives.
+            </p>
+            <div id="tree-root" class="tree-root">
+              <div class="empty">
+                Waiting for your first plan. When the backend has a tree, it
+                will appear here.
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <aside class="panel">
+          <div class="panel-inner">
+            <h2>Live Event Stream</h2>
+            <p class="panel-copy">
+              Incoming websocket events are logged here with a short summary so
+              you can inspect the backend orchestration in real time.
+            </p>
+            <div id="event-log" class="event-log">
+              <div class="event-empty">
+                No events received yet. Connect the websocket and initialize a
+                plan to start the stream.
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <script>
+      const state = {
+        tree: null,
+        events: [],
+        ws: null,
+        wsConnected: false,
+        inflight: false,
+      };
+
+      const treeRoot = document.getElementById("tree-root");
+      const eventLog = document.getElementById("event-log");
+      const summary = document.getElementById("summary");
+      const toast = document.getElementById("toast");
+      const initForm = document.getElementById("init-form");
+      const initButton = document.getElementById("init-button");
+      const refreshButton = document.getElementById("refresh-button");
+      const wsStatus = document.getElementById("ws-status");
+      const wsDot = document.getElementById("ws-dot");
+      const lastEvent = document.getElementById("last-event");
+
+      function setBusy(isBusy) {
+        state.inflight = isBusy;
+        initButton.disabled = isBusy;
+        refreshButton.disabled = isBusy;
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("visible");
+        window.clearTimeout(showToast.timeoutId);
+        showToast.timeoutId = window.setTimeout(() => {
+          toast.classList.remove("visible");
+        }, 2400);
+      }
+
+      function formatTimestamp(value) {
+        if (!value) {
+          return "just now";
+        }
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+          return "just now";
+        }
+        return date.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+      }
+
+      function statusClass(status) {
+        return `status-${String(status).toLowerCase().replaceAll("_", "-")}`;
+      }
+
+      function collectStats(node) {
+        const initial = {
+          nodes: 0,
+          leaves: 0,
+          pending: 0,
+          done: 0,
+        };
+
+        if (!node) {
+          return initial;
+        }
+
+        const stack = [node];
+        while (stack.length > 0) {
+          const current = stack.pop();
+          initial.nodes += 1;
+          if (!current.children || current.children.length === 0) {
+            initial.leaves += 1;
+          }
+          if (current.status === "PENDING") {
+            initial.pending += 1;
+          }
+          if (current.status === "DONE") {
+            initial.done += 1;
+          }
+          for (const child of current.children || []) {
+            stack.push(child);
+          }
+        }
+        return initial;
+      }
+
+      function renderStats() {
+        const stats = collectStats(state.tree);
+        document.getElementById("stat-nodes").textContent = String(stats.nodes);
+        document.getElementById("stat-leaves").textContent = String(stats.leaves);
+        document.getElementById("stat-pending").textContent = String(stats.pending);
+        document.getElementById("stat-done").textContent = String(stats.done);
+
+        if (!state.tree) {
+          summary.textContent =
+            "No task tree yet. Initialize a plan to hydrate this dashboard.";
+          return;
+        }
+
+        summary.innerHTML = `
+          <strong>${escapeHtml(state.tree.title)}</strong><br />
+          Root task id: <span class="code">${escapeHtml(state.tree.task_id)}</span><br />
+          Estimated time: ${Number(state.tree.estimated_time).toFixed(1)}h
+        `;
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
+      function summarizeEvent(event) {
+        const payload = event.payload || {};
+        if (payload.task_id) {
+          return `task ${payload.task_id}`;
+        }
+        if (payload.target_node_id) {
+          return `target ${payload.target_node_id}`;
+        }
+        if (payload.root_task_id) {
+          return `root ${payload.root_task_id}`;
+        }
+        return event.source || "backend";
+      }
+
+      function renderEvents() {
+        if (state.events.length === 0) {
+          eventLog.innerHTML = `
+            <div class="event-empty">
+              No events received yet. Connect the websocket and initialize a
+              plan to start the stream.
+            </div>
+          `;
+          return;
+        }
+
+        eventLog.innerHTML = state.events
+          .map(
+            (event) => `
+              <article class="event-card">
+                <header>
+                  <span class="event-type">${escapeHtml(event.event_type)}</span>
+                  <span class="event-time">${escapeHtml(formatTimestamp(event.timestamp))}</span>
+                </header>
+                <div>${escapeHtml(summarizeEvent(event))}</div>
+                <div class="muted code" style="margin-top: 8px">
+                  ${escapeHtml(JSON.stringify(event.payload || {}))}
+                </div>
+              </article>
+            `,
+          )
+          .join("");
+      }
+
+      function renderNode(node) {
+        const isLeaf = !node.children || node.children.length === 0;
+        const safeTitle = escapeHtml(node.title);
+        const safeDescription = escapeHtml(node.description || "No description");
+        const safeTaskId = escapeHtml(node.task_id);
+
+        const actions = isLeaf
+          ? `
+            <div class="tree-actions">
+              <button class="mini progress" data-task-id="${safeTaskId}" data-status="IN_PROGRESS" type="button">In Progress</button>
+              <button class="mini done" data-task-id="${safeTaskId}" data-status="DONE" type="button">Done</button>
+              <button class="mini blocked" data-task-id="${safeTaskId}" data-status="BLOCKED" type="button">Blocked</button>
+            </div>
+          `
+          : "";
+
+        const children = isLeaf
+          ? ""
+          : `
+            <div class="children">
+              ${(node.children || []).map(renderNode).join("")}
+            </div>
+          `;
+
+        return `
+          <article class="tree-node">
+            <div class="tree-head">
+              <div>
+                <h3 class="tree-title">${safeTitle}</h3>
+                <p class="tree-desc">${safeDescription}</p>
+              </div>
+              <span class="pill ${statusClass(node.status)}">${escapeHtml(node.status)}</span>
+            </div>
+            <div class="tree-meta">
+              <span class="pill status-pending code">${safeTaskId}</span>
+              <span class="pill status-pending">${Number(node.estimated_time).toFixed(1)}h est.</span>
+              <span class="pill status-pending">${isLeaf ? "leaf" : `${node.children.length} children`}</span>
+            </div>
+            ${actions}
+            ${children}
+          </article>
+        `;
+      }
+
+      function renderTree() {
+        if (!state.tree) {
+          treeRoot.innerHTML = `
+            <div class="empty">
+              Waiting for your first plan. When the backend has a tree, it will
+              appear here.
+            </div>
+          `;
+          return;
+        }
+
+        treeRoot.innerHTML = renderNode(state.tree);
+      }
+
+      async function fetchTree(showErrors = false) {
+        try {
+          const response = await fetch("/api/v1/tasks/tree");
+          if (response.status === 404) {
+            state.tree = null;
+            renderStats();
+            renderTree();
+            return;
+          }
+          if (!response.ok) {
+            throw new Error(`tree fetch failed: ${response.status}`);
+          }
+          state.tree = await response.json();
+          renderStats();
+          renderTree();
+        } catch (error) {
+          if (showErrors) {
+            showToast(error.message);
+          }
+        }
+      }
+
+      async function waitForTree(maxAttempts = 12) {
+        for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+          const response = await fetch("/api/v1/tasks/tree");
+          if (response.ok) {
+            state.tree = await response.json();
+            renderStats();
+            renderTree();
+            return true;
+          }
+          await new Promise((resolve) => window.setTimeout(resolve, 250));
+        }
+        return false;
+      }
+
+      async function initializePlan(event) {
+        event.preventDefault();
+        const goal = document.getElementById("goal").value.trim();
+        const persona = document.getElementById("persona").value;
+
+        if (!goal) {
+          showToast("Please add a goal before initializing the planner.");
+          return;
+        }
+
+        setBusy(true);
+        try {
+          const response = await fetch("/api/v1/tasks/init", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ goal, persona }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`init failed: ${response.status}`);
+          }
+
+          const payload = await response.json();
+          showToast(`Plan request accepted: ${payload.event_id.slice(0, 8)}`);
+          await waitForTree();
+        } catch (error) {
+          showToast(error.message);
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function updateTaskStatus(taskId, status) {
+        try {
+          const response = await fetch(`/api/v1/tasks/${taskId}/status`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status }),
+          });
+          if (!response.ok) {
+            throw new Error(`status update failed: ${response.status}`);
+          }
+          const payload = await response.json();
+          showToast(`Queued ${status} for ${taskId} (${payload.event_id.slice(0, 8)})`);
+          window.setTimeout(() => fetchTree(false), 200);
+        } catch (error) {
+          showToast(error.message);
+        }
+      }
+
+      function setWebSocketState(connected) {
+        state.wsConnected = connected;
+        wsStatus.textContent = connected ? "Websocket connected" : "Websocket reconnecting...";
+        wsDot.style.color = connected ? "#9ee2b2" : "#f9cf7f";
+      }
+
+      function connectWebSocket() {
+        const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+        const socket = new WebSocket(`${protocol}://${window.location.host}/ws/tree?scope=all`);
+
+        socket.addEventListener("open", () => {
+          setWebSocketState(true);
+        });
+
+        socket.addEventListener("close", () => {
+          setWebSocketState(false);
+          window.setTimeout(connectWebSocket, 1200);
+        });
+
+        socket.addEventListener("error", () => {
+          socket.close();
+        });
+
+        socket.addEventListener("message", (rawEvent) => {
+          const payload = JSON.parse(rawEvent.data);
+          state.events.unshift(payload);
+          state.events = state.events.slice(0, 30);
+          lastEvent.textContent = payload.event_type;
+          renderEvents();
+
+          if (payload.event_type === "NEW_TASK" || payload.event_type === "TREE_MUTATED" || payload.event_type === "TASK_STATUS_UPDATED") {
+            fetchTree(false);
+          }
+        });
+
+        state.ws = socket;
+      }
+
+      initForm.addEventListener("submit", initializePlan);
+      refreshButton.addEventListener("click", () => fetchTree(true));
+
+      treeRoot.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-task-id]");
+        if (!button) {
+          return;
+        }
+        updateTaskStatus(button.dataset.taskId, button.dataset.status);
+      });
+
+      renderStats();
+      renderTree();
+      renderEvents();
+      fetchTree(false);
+      connectWebSocket();
+    </script>
+  </body>
+</html>

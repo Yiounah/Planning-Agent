@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">SYA Task Scheduler Architecture</title>
+  <desc id="desc">A layered, event-driven architecture diagram for the SYA Task Scheduler codebase.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7f8fb; }
+      .title { font: 700 34px Arial, Helvetica, sans-serif; fill: #172033; }
+      .subtitle { font: 400 17px Arial, Helvetica, sans-serif; fill: #596273; }
+      .layer-title { font: 700 15px Arial, Helvetica, sans-serif; fill: #3c4658; letter-spacing: .5px; text-transform: uppercase; }
+      .node-title { font: 700 18px Arial, Helvetica, sans-serif; fill: #172033; }
+      .node-sub { font: 400 13px Arial, Helvetica, sans-serif; fill: #4f5b6f; }
+      .node-code { font: 400 12px Menlo, Consolas, monospace; fill: #667085; }
+      .small { font: 400 12px Arial, Helvetica, sans-serif; fill: #596273; }
+      .event { font: 700 12px Menlo, Consolas, monospace; fill: #394150; }
+      .formula { font: 500 15px Menlo, Consolas, monospace; fill: #213047; }
+      .panel { stroke-width: 1.4; rx: 18; }
+      .box { fill: #ffffff; stroke: #c9d2df; stroke-width: 1.5; rx: 14; filter: url(#shadow); }
+      .box-blue { fill: #f1f6ff; stroke: #97b7e8; }
+      .box-green { fill: #eef8f3; stroke: #8ec8a8; }
+      .box-amber { fill: #fff7e8; stroke: #e1bb72; }
+      .box-red { fill: #fff1f0; stroke: #e6a19b; }
+      .box-violet { fill: #f5f1ff; stroke: #b8a6e8; }
+      .bus { fill: #172033; stroke: #0d1320; stroke-width: 1.5; rx: 18; filter: url(#busShadow); }
+      .bus-title { font: 700 22px Arial, Helvetica, sans-serif; fill: #ffffff; }
+      .bus-sub { font: 400 13px Arial, Helvetica, sans-serif; fill: #cbd5e1; }
+      .arrow { fill: none; stroke: #526071; stroke-width: 2.1; marker-end: url(#arrow); }
+      .arrow-soft { fill: none; stroke: #7b8798; stroke-width: 1.7; stroke-dasharray: 6 6; marker-end: url(#arrowSoft); }
+      .arrow-event { fill: none; stroke: #1f6f50; stroke-width: 2.2; marker-end: url(#arrowGreen); }
+      .arrow-feedback { fill: none; stroke: #a65d14; stroke-width: 2.2; marker-end: url(#arrowAmber); }
+      .number { font: 700 13px Arial, Helvetica, sans-serif; fill: #ffffff; }
+      .badge { fill: #172033; }
+      .legend-label { font: 400 13px Arial, Helvetica, sans-serif; fill: #435066; }
+    </style>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#172033" flood-opacity="0.09"/>
+    </filter>
+    <filter id="busShadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#172033" flood-opacity="0.18"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#526071"/>
+    </marker>
+    <marker id="arrowSoft" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#7b8798"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#1f6f50"/>
+    </marker>
+    <marker id="arrowAmber" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#a65d14"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1600" height="1000"/>
+
+  <text x="80" y="58" class="title">SYA Task Scheduler: Event-Driven Cognitive Planning Architecture</text>
+  <text x="80" y="88" class="subtitle">Layered code framework for intent capture, hierarchical decomposition, execution feedback, and rolling-wave replanning.</text>
+
+  <rect x="60" y="118" width="1480" height="132" class="panel" fill="#edf4ff" stroke="#bfd4f3"/>
+  <text x="82" y="146" class="layer-title">L0. Interface and Application Entry</text>
+
+  <rect x="90" y="164" width="300" height="58" class="box box-blue"/>
+  <text x="114" y="188" class="node-title">Browser UI</text>
+  <text x="114" y="208" class="node-code">app/static/index.html</text>
+
+  <rect x="505" y="164" width="300" height="58" class="box box-blue"/>
+  <text x="529" y="188" class="node-title">FastAPI REST API</text>
+  <text x="529" y="208" class="node-code">POST /init, PATCH /status, GET /tree</text>
+
+  <rect x="920" y="164" width="300" height="58" class="box box-blue"/>
+  <text x="944" y="188" class="node-title">WebSocket Endpoint</text>
+  <text x="944" y="208" class="node-code">/ws/tree?scope=all</text>
+
+  <rect x="1335" y="164" width="170" height="58" class="box box-blue"/>
+  <text x="1359" y="188" class="node-title">App Container</text>
+  <text x="1359" y="208" class="node-code">app/main.py</text>
+
+  <rect x="60" y="278" width="1480" height="138" class="panel" fill="#f1f4f8" stroke="#cbd5e1"/>
+  <text x="82" y="306" class="layer-title">L1. Event Orchestration Backbone</text>
+
+  <rect x="420" y="322" width="760" height="72" class="bus"/>
+  <text x="640" y="350" class="bus-title">AsyncEventBus</text>
+  <text x="590" y="374" class="bus-sub">single async queue, typed Pub/Sub, FIFO dequeue, fan-out dispatch</text>
+
+  <rect x="60" y="444" width="1480" height="244" class="panel" fill="#f4fbf7" stroke="#bddfca"/>
+  <text x="82" y="472" class="layer-title">L2. Cognitive Planning and Rolling Control</text>
+
+  <rect x="90" y="504" width="280" height="94" class="box box-green"/>
+  <text x="114" y="530" class="node-title">CognitiveEngine</text>
+  <text x="114" y="552" class="node-sub">intent context, persona injection, replan prompts</text>
+  <text x="114" y="576" class="node-code">core/cognitive_engine.py</text>
+
+  <rect x="438" y="504" width="280" height="94" class="box box-violet"/>
+  <text x="462" y="530" class="node-title">LLM Planner Gateway</text>
+  <text x="462" y="552" class="node-sub">OpenAI-compatible generation or mock fallback</text>
+  <text x="462" y="576" class="node-code">OpenAICompatiblePlannerGateway</text>
+
+  <rect x="786" y="504" width="280" height="94" class="box box-green"/>
+  <text x="810" y="530" class="node-title">RollingWavePlanner</text>
+  <text x="810" y="552" class="node-sub">validate tree, create plan, replace pending subtree</text>
+  <text x="810" y="576" class="node-code">core/rolling_planner.py</text>
+
+  <rect x="1134" y="504" width="280" height="94" class="box box-amber"/>
+  <text x="1158" y="530" class="node-title">TaskManager</text>
+  <text x="1158" y="552" class="node-sub">status mutation, batch trigger, replan decision</text>
+  <text x="1158" y="576" class="node-code">services/task_manager.py</text>
+
+  <rect x="1140" y="620" width="268" height="44" class="box box-amber"/>
+  <text x="1164" y="646" class="node-title">MetricsEvaluator</text>
+  <text x="1316" y="646" class="node-code">completion / delay</text>
+
+  <rect x="60" y="716" width="1480" height="146" class="panel" fill="#fff8ed" stroke="#e7c27d"/>
+  <text x="82" y="744" class="layer-title">L3. Runtime State and Typed Domain Contracts</text>
+
+  <rect x="90" y="770" width="300" height="62" class="box box-amber"/>
+  <text x="114" y="795" class="node-title">MemoryStore</text>
+  <text x="114" y="817" class="node-code">goal context, task tree, event history, execution log</text>
+
+  <rect x="470" y="770" width="250" height="62" class="box box-amber"/>
+  <text x="494" y="795" class="node-title">TaskNode</text>
+  <text x="494" y="817" class="node-code">recursive task tree schema</text>
+
+  <rect x="785" y="770" width="250" height="62" class="box box-amber"/>
+  <text x="809" y="795" class="node-title">DomainEvent</text>
+  <text x="809" y="817" class="node-code">event types and payload models</text>
+
+  <rect x="1100" y="770" width="190" height="62" class="box box-amber"/>
+  <text x="1124" y="795" class="node-title">PersonaProfile</text>
+  <text x="1124" y="817" class="node-code">balanced / micro / macro</text>
+
+  <rect x="1340" y="770" width="165" height="62" class="box box-amber"/>
+  <text x="1364" y="795" class="node-title">Settings</text>
+  <text x="1364" y="817" class="node-code">thresholds, LLM, WS</text>
+
+  <rect x="60" y="890" width="1480" height="62" class="panel" fill="#fff3f1" stroke="#e7aaa3"/>
+  <text x="82" y="918" class="layer-title">L4. Verification</text>
+  <text x="235" y="919" class="formula">tests/test_smoke.py: init task tree -> status updates -> replan flow -> websocket event delivery</text>
+
+  <path class="arrow" d="M390 193 C430 193 462 193 505 193"/>
+  <path class="arrow" d="M805 193 C846 193 879 193 920 193"/>
+  <path class="arrow-soft" d="M1220 193 C1260 193 1294 193 1335 193"/>
+  <path class="arrow-event" d="M655 222 C655 252 690 286 754 322"/>
+  <path class="arrow-event" d="M1070 222 C1070 252 976 286 866 322"/>
+
+  <path class="arrow-event" d="M700 394 C612 430 430 452 300 504"/>
+  <path class="arrow-event" d="M796 394 C812 432 864 456 912 504"/>
+  <path class="arrow-event" d="M945 394 C1054 430 1164 455 1256 504"/>
+  <path class="arrow-event" d="M1250 504 C1196 458 1085 420 884 394"/>
+  <path class="arrow-event" d="M242 504 C284 450 416 419 700 394"/>
+
+  <path class="arrow" d="M370 551 C392 551 414 551 438 551"/>
+  <path class="arrow" d="M718 551 C742 551 762 551 786 551"/>
+  <path class="arrow-feedback" d="M1274 598 C1274 604 1274 612 1274 620"/>
+  <path class="arrow-feedback" d="M1140 642 C1068 643 1032 631 1024 598"/>
+
+  <path class="arrow-soft" d="M230 598 C220 650 190 708 214 770"/>
+  <path class="arrow-soft" d="M926 598 C880 672 598 700 590 770"/>
+  <path class="arrow-soft" d="M1274 664 C1162 709 518 713 260 770"/>
+  <path class="arrow-soft" d="M595 770 C558 730 362 672 230 598"/>
+  <path class="arrow-soft" d="M910 770 C900 694 894 641 925 598"/>
+  <path class="arrow-soft" d="M1195 770 C1126 682 422 650 242 598"/>
+  <path class="arrow-soft" d="M1422 770 C1410 688 1340 638 1274 598"/>
+
+  <path class="arrow-event" d="M1180 358 C1286 360 1430 420 1430 604 C1430 708 1320 728 1274 770"/>
+  <path class="arrow-event" d="M1430 604 C1430 480 1250 276 1070 222"/>
+
+  <path class="arrow-soft" d="M800 862 C800 876 800 882 800 890"/>
+
+  <g transform="translate(84 338)">
+    <circle cx="0" cy="0" r="13" class="badge"/>
+    <text x="-4" y="5" class="number">1</text>
+    <text x="22" y="5" class="event">NEW_TASK_REQUEST -> TASK_TREE_DRAFTED</text>
+  </g>
+  <g transform="translate(84 372)">
+    <circle cx="0" cy="0" r="13" fill="#1f6f50"/>
+    <text x="-4" y="5" class="number">2</text>
+    <text x="22" y="5" class="event">NEW_TASK / TREE_MUTATED -> WebSocket sync</text>
+  </g>
+  <g transform="translate(1060 338)">
+    <circle cx="0" cy="0" r="13" fill="#a65d14"/>
+    <text x="-4" y="5" class="number">3</text>
+    <text x="22" y="5" class="event">STATUS_UPDATE -> EVALUATE_PROGRESS</text>
+  </g>
+  <g transform="translate(1060 372)">
+    <circle cx="0" cy="0" r="13" fill="#6b55b6"/>
+    <text x="-4" y="5" class="number">4</text>
+    <text x="22" y="5" class="event">REPLAN_FINE/COARSE -> REPLAN_TRIGGER</text>
+  </g>
+
+  <rect x="88" y="624" width="990" height="42" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="112" y="651" class="formula">Intent + Persona -> Task Decomposition -> Execution Observations -> Metrics -> Granularity Policy -> Subtree Replacement</text>
+
+  <g transform="translate(1112 910)">
+    <line x1="0" y1="0" x2="34" y2="0" class="arrow-event"/>
+    <text x="45" y="5" class="legend-label">event flow</text>
+    <line x1="150" y1="0" x2="184" y2="0" class="arrow-feedback"/>
+    <text x="195" y="5" class="legend-label">feedback control</text>
+    <line x1="342" y1="0" x2="376" y2="0" class="arrow-soft"/>
+    <text x="387" y="5" class="legend-label">state/schema dependency</text>
+  </g>
+</svg>

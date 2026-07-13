@@ -1,0 +1,21 @@
+{
+  "id": "planning",
+  "version": "0.1.0",
+  "runtime": "local-http",
+  "entry": { "command": "bin/planning-server", "args": [] },
+  "api": {
+    "basePath": "/api/planning",
+    "health": { "method": "GET", "path": "/health" },
+    "events": { "transport": "websocket", "path": "/ws/tree" }
+  },
+  "capabilities": [
+    "cognitive-task-decomposition",
+    "rolling-wave-planning",
+    "hierarchical-task-tree",
+    "adaptive-replanning",
+    "execution-feedback-evaluation",
+    "websocket-tree-sync"
+  ],
+  "events": ["NEW_TASK", "TASK_STATUS_UPDATED", "TREE_MUTATED"],
+  "permissions": ["llm-api"]
+}

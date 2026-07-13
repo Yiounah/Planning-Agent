@@ -1,0 +1,24 @@
+{
+  "server": {
+    "host": "127.0.0.1",
+    "portEnv": "PORT"
+  },
+  "planning": {
+    "completionLowThreshold": 0.6,
+    "completionHighThreshold": 0.9,
+    "evaluationLeafBatchSize": 3,
+    "metricsWindowSize": 10
+  },
+  "sync": {
+    "eventHistoryMaxlen": 2000,
+    "wsPingIntervalSeconds": 20
+  },
+  "llm": {
+    "provider": "openai-compatible",
+    "baseUrl": "https://api.openai.com/v1",
+    "apiKeyEnv": "SYA_OPENAI_API_KEY",
+    "model": "gpt-4o-mini",
+    "timeoutSeconds": 45
+  },
+  "personas": ["balanced", "micro", "macro"]
+}
