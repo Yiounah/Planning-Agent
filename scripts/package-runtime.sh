@@ -22,8 +22,7 @@ if [[ "${TARGET}" == "current" ]]; then
   TARGET="${PLATFORM}-${ARCH}"
 fi
 
-STAGE_DIR="${ROOT_DIR}/dist/runtime"
-ARCHIVE="${ROOT_DIR}/dist/sya-function-planning-${VERSION}-${TARGET}.tar.gz"
+ARCHIVE="${ROOT_DIR}/dist/sya-function-scheduler-${VERSION}-${TARGET}.tar.gz"
 
 mkdir -p "${ROOT_DIR}/dist"
 

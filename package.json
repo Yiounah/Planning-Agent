@@ -1,8 +1,8 @@
 {
-  "name": "@sya/function-planning",
+  "name": "@sya/function-scheduler",
   "version": "0.1.0",
   "private": true,
-  "description": "SYA planning function runtime.",
+  "description": "SYA scheduler function runtime.",
   "scripts": {
     "build": "scripts/package-runtime.sh current",
     "test": "scripts/smoke-test.sh"

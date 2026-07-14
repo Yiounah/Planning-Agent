@@ -131,7 +131,7 @@ curl http://127.0.0.1:8000/health
 Expected response:
 
 ```json
-{"ok":true,"data":{"status":"ok","functionId":"planning","version":"0.1.0"},"error":null}
+{"ok":true,"data":{"status":"ok","functionId":"scheduler","version":"0.1.0"},"error":null}
 ```
 
 ### Step 4: Initialize a Task Planning Session
@@ -248,17 +248,23 @@ python -m unittest discover -s tests -p 'test*.py' -v
 - `GET /` browser UI for local task-tree inspection
 - `GET /health`
 - `GET /manifest`
-- `GET /api/planning/actions`
-- `GET /api/planning/config`
-- `POST /api/planning/tasks/init`
-- `POST /api/planning/tasks/status`
-- `GET /api/planning/tasks/tree`
+- `POST /api/scheduler/decompose`
+- `GET /api/scheduler/tasks`
+- `GET /api/scheduler/tasks/{taskId}`
+- `PUT /api/scheduler/tasks/{taskId}`
+- `DELETE /api/scheduler/tasks/{taskId}`
+- `GET /api/scheduler/timeline`
+- `POST /api/scheduler/tasks/reorder`
+- `GET /api/scheduler/stats`
+- `GET /api/scheduler/config`
+- `PUT /api/scheduler/config`
+- `GET /api/scheduler/events`
 - `POST /api/v1/tasks/init`
 - `PATCH /api/v1/tasks/{task_id}/status`
 - `GET /api/v1/tasks/tree`
 - `WS /ws/tree`
 
-The `/api/planning/*` routes are the SYA Function API wrapper. They return the
+The `/api/scheduler/*` routes are the SYA Function API wrapper. They return the
 standard `{ "ok": true, "data": ... }` envelope expected by the Electron
 function runtime. The `/api/v1/tasks/*` routes are kept for the bundled browser
 debug UI and return the original raw task-tree shapes.
