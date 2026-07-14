@@ -24,6 +24,7 @@ manifest.json
 api.openapi.json
 bin/scheduler-server
 assets/
+mock/
 sya_task_scheduler/
 ```
 
@@ -55,6 +56,27 @@ All endpoints except `/manifest` return:
 
 The legacy debug routes remain under `/api/v1/tasks/*`, and the debug page is
 served from `/`.
+
+## Mock Data
+
+`mock/` follows the same structure as `SYA-UI/function/scheduler/mock`:
+
+```text
+mock/README.md
+mock/data.json
+mock/server.py
+```
+
+Use it when the real function runtime is not ready but the UI needs stable
+integration-test data:
+
+```bash
+cd mock
+python3 server.py
+```
+
+The mock server listens on `http://127.0.0.1:8766` by default and implements
+the `/api/scheduler/*` endpoints with common sample tasks.
 
 ## Local Run
 

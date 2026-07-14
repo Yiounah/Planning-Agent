@@ -39,6 +39,7 @@ tar -czf "${ARCHIVE}" \
   api.openapi.json \
   bin \
   assets \
+  mock \
   sya_task_scheduler
 
 echo "${ARCHIVE}"
