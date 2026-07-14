@@ -1,0 +1,323 @@
+{
+  "tasks": [
+    {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "title": "Finish weekly research report",
+      "description": "Write a short weekly research update with progress, blockers, and next steps for the advisor meeting.",
+      "status": "in_progress",
+      "priority": "high",
+      "estimatedMinutes": 120,
+      "actualMinutes": 45,
+      "deadline": "2026-07-14T18:00:00Z",
+      "scheduledDate": "2026-07-14",
+      "scheduledStart": "09:00",
+      "sourceText": "Finish the weekly research report before today's advisor check-in",
+      "attachments": ["experiment-notes.md", "draft-outline.md"],
+      "subtasks": [
+        {
+          "id": "11111111-1111-4111-8111-111111111112",
+          "taskId": "11111111-1111-4111-8111-111111111111",
+          "title": "Summarize completed experiments",
+          "estimatedMinutes": 35,
+          "status": "completed",
+          "order": 0
+        },
+        {
+          "id": "11111111-1111-4111-8111-111111111113",
+          "taskId": "11111111-1111-4111-8111-111111111111",
+          "title": "Write blocker and risk section",
+          "estimatedMinutes": 35,
+          "status": "in_progress",
+          "order": 1
+        },
+        {
+          "id": "11111111-1111-4111-8111-111111111114",
+          "taskId": "11111111-1111-4111-8111-111111111111",
+          "title": "Polish next-step bullets",
+          "estimatedMinutes": 50,
+          "status": "pending",
+          "order": 2
+        }
+      ],
+      "createdAt": "2026-07-14T08:15:00Z",
+      "updatedAt": "2026-07-14T09:45:00Z"
+    },
+    {
+      "id": "22222222-2222-4222-8222-222222222222",
+      "title": "Review scheduler integration PR",
+      "description": "Review API wiring, mock data compatibility, and edge cases in the scheduler function integration pull request.",
+      "status": "pending",
+      "priority": "high",
+      "estimatedMinutes": 90,
+      "actualMinutes": 0,
+      "deadline": "2026-07-15T12:00:00Z",
+      "scheduledDate": "2026-07-14",
+      "scheduledStart": "11:00",
+      "sourceText": "Review the scheduler integration PR before tomorrow noon",
+      "attachments": ["api.openapi.json"],
+      "subtasks": [
+        {
+          "id": "22222222-2222-4222-8222-222222222223",
+          "taskId": "22222222-2222-4222-8222-222222222222",
+          "title": "Check operationId mapping",
+          "estimatedMinutes": 30,
+          "status": "pending",
+          "order": 0
+        },
+        {
+          "id": "22222222-2222-4222-8222-222222222224",
+          "taskId": "22222222-2222-4222-8222-222222222222",
+          "title": "Verify mock server response envelopes",
+          "estimatedMinutes": 30,
+          "status": "pending",
+          "order": 1
+        },
+        {
+          "id": "22222222-2222-4222-8222-222222222225",
+          "taskId": "22222222-2222-4222-8222-222222222222",
+          "title": "Leave review comments",
+          "estimatedMinutes": 30,
+          "status": "pending",
+          "order": 2
+        }
+      ],
+      "createdAt": "2026-07-13T17:00:00Z",
+      "updatedAt": "2026-07-13T17:00:00Z"
+    },
+    {
+      "id": "33333333-3333-4333-8333-333333333333",
+      "title": "Prepare interview study block",
+      "description": "Practice common system design and behavioral interview prompts with a focused study block.",
+      "status": "pending",
+      "priority": "medium",
+      "estimatedMinutes": 75,
+      "actualMinutes": 0,
+      "deadline": "2026-07-16T21:00:00Z",
+      "scheduledDate": "2026-07-14",
+      "scheduledStart": "14:00",
+      "sourceText": "Spend time today preparing for a technical interview",
+      "attachments": [],
+      "subtasks": [
+        {
+          "id": "33333333-3333-4333-8333-333333333334",
+          "taskId": "33333333-3333-4333-8333-333333333333",
+          "title": "Review system design notes",
+          "estimatedMinutes": 30,
+          "status": "pending",
+          "order": 0
+        },
+        {
+          "id": "33333333-3333-4333-8333-333333333335",
+          "taskId": "33333333-3333-4333-8333-333333333333",
+          "title": "Practice two behavioral answers",
+          "estimatedMinutes": 25,
+          "status": "pending",
+          "order": 1
+        },
+        {
+          "id": "33333333-3333-4333-8333-333333333336",
+          "taskId": "33333333-3333-4333-8333-333333333333",
+          "title": "Update notes with weak spots",
+          "estimatedMinutes": 20,
+          "status": "pending",
+          "order": 2
+        }
+      ],
+      "createdAt": "2026-07-14T08:30:00Z",
+      "updatedAt": "2026-07-14T08:30:00Z"
+    },
+    {
+      "id": "44444444-4444-4444-8444-444444444444",
+      "title": "Plan grocery and meal prep",
+      "description": "Make a short grocery list, order missing ingredients, and prep simple meals for the next two days.",
+      "status": "pending",
+      "priority": "medium",
+      "estimatedMinutes": 60,
+      "actualMinutes": 0,
+      "deadline": "2026-07-14T20:00:00Z",
+      "scheduledDate": "2026-07-14",
+      "scheduledStart": "16:00",
+      "sourceText": "Plan groceries and prep food after work",
+      "attachments": [],
+      "subtasks": [
+        {
+          "id": "44444444-4444-4444-8444-444444444445",
+          "taskId": "44444444-4444-4444-8444-444444444444",
+          "title": "Check pantry and fridge",
+          "estimatedMinutes": 15,
+          "status": "pending",
+          "order": 0
+        },
+        {
+          "id": "44444444-4444-4444-8444-444444444446",
+          "taskId": "44444444-4444-4444-8444-444444444444",
+          "title": "Order missing groceries",
+          "estimatedMinutes": 15,
+          "status": "pending",
+          "order": 1
+        },
+        {
+          "id": "44444444-4444-4444-8444-444444444447",
+          "taskId": "44444444-4444-4444-8444-444444444444",
+          "title": "Prep two simple meals",
+          "estimatedMinutes": 30,
+          "status": "pending",
+          "order": 2
+        }
+      ],
+      "createdAt": "2026-07-14T10:00:00Z",
+      "updatedAt": "2026-07-14T10:00:00Z"
+    },
+    {
+      "id": "55555555-5555-4555-8555-555555555555",
+      "title": "Clean inbox and reply to important messages",
+      "description": "Process unread mail, archive low-priority messages, and reply to messages that block collaborators.",
+      "status": "completed",
+      "priority": "low",
+      "estimatedMinutes": 45,
+      "actualMinutes": 40,
+      "deadline": "2026-07-14T10:30:00Z",
+      "scheduledDate": "2026-07-14",
+      "scheduledStart": "08:00",
+      "sourceText": "Clean up inbox before starting deep work",
+      "attachments": [],
+      "subtasks": [
+        {
+          "id": "55555555-5555-4555-8555-555555555556",
+          "taskId": "55555555-5555-4555-8555-555555555555",
+          "title": "Archive newsletters and receipts",
+          "estimatedMinutes": 15,
+          "status": "completed",
+          "order": 0
+        },
+        {
+          "id": "55555555-5555-4555-8555-555555555557",
+          "taskId": "55555555-5555-4555-8555-555555555555",
+          "title": "Reply to two urgent messages",
+          "estimatedMinutes": 30,
+          "status": "completed",
+          "order": 1
+        }
+      ],
+      "createdAt": "2026-07-14T07:40:00Z",
+      "updatedAt": "2026-07-14T08:45:00Z"
+    },
+    {
+      "id": "66666666-6666-4666-8666-666666666666",
+      "title": "Evening workout",
+      "description": "Do a short strength session and a walk to reset after screen-heavy work.",
+      "status": "pending",
+      "priority": "low",
+      "estimatedMinutes": 50,
+      "actualMinutes": 0,
+      "deadline": "2026-07-14T22:00:00Z",
+      "scheduledDate": "2026-07-14",
+      "scheduledStart": "18:30",
+      "sourceText": "Exercise tonight if there is enough energy after work",
+      "attachments": [],
+      "subtasks": [
+        {
+          "id": "66666666-6666-4666-8666-666666666667",
+          "taskId": "66666666-6666-4666-8666-666666666666",
+          "title": "Strength circuit",
+          "estimatedMinutes": 30,
+          "status": "pending",
+          "order": 0
+        },
+        {
+          "id": "66666666-6666-4666-8666-666666666668",
+          "taskId": "66666666-6666-4666-8666-666666666666",
+          "title": "Cool-down walk",
+          "estimatedMinutes": 20,
+          "status": "pending",
+          "order": 1
+        }
+      ],
+      "createdAt": "2026-07-14T10:15:00Z",
+      "updatedAt": "2026-07-14T10:15:00Z"
+    }
+  ],
+  "timeline": [
+    {
+      "taskId": "55555555-5555-4555-8555-555555555555",
+      "title": "Clean inbox and reply to important messages",
+      "startTime": "08:00",
+      "endTime": "08:45",
+      "priority": "low",
+      "status": "completed"
+    },
+    {
+      "taskId": "11111111-1111-4111-8111-111111111111",
+      "title": "Finish weekly research report",
+      "startTime": "09:00",
+      "endTime": "10:20",
+      "priority": "high",
+      "status": "in_progress"
+    },
+    {
+      "taskId": "break-0",
+      "title": "Break",
+      "startTime": "10:20",
+      "endTime": "10:30",
+      "priority": "low",
+      "status": "pending"
+    },
+    {
+      "taskId": "22222222-2222-4222-8222-222222222222",
+      "title": "Review scheduler integration PR",
+      "startTime": "11:00",
+      "endTime": "12:30",
+      "priority": "high",
+      "status": "pending"
+    },
+    {
+      "taskId": "break-1",
+      "title": "Lunch",
+      "startTime": "12:30",
+      "endTime": "13:30",
+      "priority": "low",
+      "status": "pending"
+    },
+    {
+      "taskId": "33333333-3333-4333-8333-333333333333",
+      "title": "Prepare interview study block",
+      "startTime": "14:00",
+      "endTime": "15:15",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "taskId": "44444444-4444-4444-8444-444444444444",
+      "title": "Plan grocery and meal prep",
+      "startTime": "16:00",
+      "endTime": "17:00",
+      "priority": "medium",
+      "status": "pending"
+    },
+    {
+      "taskId": "66666666-6666-4666-8666-666666666666",
+      "title": "Evening workout",
+      "startTime": "18:30",
+      "endTime": "19:20",
+      "priority": "low",
+      "status": "pending"
+    }
+  ],
+  "config": {
+    "llm": {
+      "provider": "openai-compatible",
+      "apiKey": "sk-redacted",
+      "model": "mock-scheduler",
+      "baseUrl": ""
+    },
+    "storage": {
+      "dbPath": "~/.sya/scheduler.db"
+    },
+    "decompose": {
+      "maxSubtasks": 8,
+      "defaultEstimateMinutes": 30,
+      "includeBreaks": true,
+      "breakDurationMinutes": 10
+    }
+  }
+}
