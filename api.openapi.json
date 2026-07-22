@@ -1,14 +1,14 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "SYA Scheduler Function API",
+    "title": "SYA Planning Function API",
     "version": "0.1.0",
-    "description": "Scheduler-compatible task decomposition and rolling-wave planning API for SYA."
+    "description": "Cognitive-aware dynamic task decomposition and rolling-wave planning API for the SYA platform."
   },
   "servers": [
     {
       "url": "http://localhost:{port}",
-      "description": "Local SYA function runtime. Electron assigns the port dynamically.",
+      "description": "Local SYA function runtime. The Electron host assigns the port dynamically.",
       "variables": {
         "port": {
           "default": "0"
@@ -20,13 +20,23 @@
     "/health": {
       "get": {
         "operationId": "health",
-        "summary": "Scheduler function health check",
+        "summary": "Planning function health check",
         "responses": {
           "200": {
             "description": "Runtime is healthy",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionResponse"
+                },
+                "example": {
+                  "ok": true,
+                  "data": {
+                    "status": "ok",
+                    "functionId": "planning",
+                    "version": "0.1.0"
+                  }
+                }
               }
             }
           }
@@ -36,266 +46,176 @@
     "/manifest": {
       "get": {
         "operationId": "manifest",
-        "summary": "Scheduler function manifest",
+        "summary": "Planning function manifest",
         "responses": {
           "200": {
-            "description": "Function manifest",
+            "description": "Function manifest with capabilities, events, and permissions",
             "content": {
               "application/json": {
-                "schema": { "type": "object" }
+                "schema": {
+                  "type": "object"
+                }
               }
             }
           }
         }
       }
     },
-    "/api/scheduler/decompose": {
-      "post": {
-        "operationId": "decompose",
-        "summary": "Decompose natural-language input into tasks and timeline events",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/DecomposeRequest" }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Decomposition result",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/scheduler/tasks": {
-      "get": {
-        "operationId": "tasks.list",
-        "summary": "List tasks",
-        "parameters": [
-          {
-            "name": "status",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["pending", "in_progress", "completed", "cancelled"]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Task list",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/scheduler/tasks/{taskId}": {
-      "get": {
-        "operationId": "tasks.get",
-        "summary": "Get one task",
-        "parameters": [
-          {
-            "name": "taskId",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Task detail",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "operationId": "tasks.update",
-        "summary": "Update a task",
-        "parameters": [
-          {
-            "name": "taskId",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": { "type": "object" }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Updated task",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "operationId": "tasks.delete",
-        "summary": "Delete a task",
-        "parameters": [
-          {
-            "name": "taskId",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Delete result",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/scheduler/timeline": {
-      "get": {
-        "operationId": "timeline.get",
-        "summary": "Get timeline view",
-        "responses": {
-          "200": {
-            "description": "Timeline data",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/scheduler/tasks/reorder": {
-      "post": {
-        "operationId": "tasks.reorder",
-        "summary": "Reorder tasks",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/ReorderTasksRequest" }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Reorder result",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/scheduler/stats": {
-      "get": {
-        "operationId": "stats.get",
-        "summary": "Get daily task statistics",
-        "responses": {
-          "200": {
-            "description": "Daily stats",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/scheduler/config": {
-      "get": {
-        "operationId": "config.get",
-        "summary": "Get scheduler configuration",
-        "responses": {
-          "200": {
-            "description": "Scheduler configuration",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "operationId": "config.update",
-        "summary": "Update scheduler configuration",
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": { "type": "object" }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Updated scheduler configuration",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/scheduler/events": {
-      "get": {
-        "operationId": "events",
-        "summary": "Server-sent event stream",
-        "responses": {
-          "200": {
-            "description": "SSE stream",
-            "content": {
-              "text/event-stream": {
-                "schema": { "type": "string" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/scheduler/actions": {
+    "/api/planning/actions": {
       "get": {
         "operationId": "actions.list",
-        "summary": "List callable actions",
+        "summary": "List callable Function API actions",
         "responses": {
           "200": {
             "description": "Action list",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/FunctionResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/planning/config": {
+      "get": {
+        "operationId": "config.get",
+        "summary": "Get current planning configuration",
+        "responses": {
+          "200": {
+            "description": "Runtime configuration without secrets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionResponse"
+                },
+                "example": {
+                  "ok": true,
+                  "data": {
+                    "planning": {
+                      "completionLowThreshold": 0.6,
+                      "completionHighThreshold": 0.9,
+                      "evaluationLeafBatchSize": 3,
+                      "metricsWindowSize": 10
+                    },
+                    "llm": {
+                      "provider": "openai-compatible",
+                      "model": "gpt-4o-mini",
+                      "configured": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/planning/tasks/init": {
+      "post": {
+        "operationId": "tasks.init",
+        "summary": "Initialize a cognitive planning run",
+        "description": "Accepts a free-form goal and persona, publishes a NEW_TASK_REQUEST event, and asynchronously generates a task tree.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitTaskRequest"
+              },
+              "example": {
+                "goal": "Build an AI scheduling backend",
+                "persona": "balanced"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Planning request accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionResponse"
+                },
+                "example": {
+                  "ok": true,
+                  "data": {
+                    "accepted": true,
+                    "event_id": "8fd24f1a1e0f4e49b47f7e3c7f11d98e"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/planning/tasks/tree": {
+      "get": {
+        "operationId": "tasks.tree",
+        "summary": "Get the current task tree snapshot",
+        "description": "Returns `{ tree: null }` before the first planning run has completed.",
+        "responses": {
+          "200": {
+            "description": "Current task tree snapshot or null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionResponse"
+                },
+                "example": {
+                  "ok": true,
+                  "data": {
+                    "tree": {
+                      "task_id": "root-demo",
+                      "parent_id": null,
+                      "title": "Build an AI scheduling backend",
+                      "description": "Top-level plan",
+                      "status": "PENDING",
+                      "is_leaf": false,
+                      "estimated_time": 8,
+                      "actual_time": null,
+                      "children": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/planning/tasks/status": {
+      "post": {
+        "operationId": "tasks.status.update",
+        "summary": "Update a task node status",
+        "description": "Function API status update endpoint without URL path parameters. The mutation is processed asynchronously through the event bus.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskStatusUpdateRequest"
+              },
+              "example": {
+                "taskId": "root-demo-a",
+                "status": "DONE",
+                "actualTime": 1.2
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status update accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionResponse"
+                }
               }
             }
           }
@@ -309,7 +229,9 @@
         "type": "object",
         "required": ["ok"],
         "properties": {
-          "ok": { "type": "boolean" },
+          "ok": {
+            "type": "boolean"
+          },
           "data": {},
           "error": {
             "type": "object",
@@ -321,27 +243,71 @@
           }
         }
       },
-      "DecomposeRequest": {
+      "InitTaskRequest": {
         "type": "object",
-        "required": ["input"],
+        "required": ["goal"],
         "additionalProperties": false,
         "properties": {
-          "input": { "type": "string", "minLength": 1 },
-          "attachments": {
-            "type": "array",
-            "items": { "type": "string" }
+          "goal": {
+            "type": "string",
+            "minLength": 1
+          },
+          "persona": {
+            "type": "string",
+            "default": "balanced",
+            "enum": ["balanced", "micro", "macro"]
           }
         }
       },
-      "ReorderTasksRequest": {
+      "TaskStatusUpdateRequest": {
         "type": "object",
-        "required": ["taskIds"],
+        "required": ["taskId", "status"],
         "additionalProperties": false,
         "properties": {
-          "taskIds": {
+          "taskId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING", "IN_PROGRESS", "DONE", "BLOCKED", "SKIPPED"]
+          },
+          "actualTime": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
+      },
+      "TaskNode": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "parent_id",
+          "title",
+          "description",
+          "status",
+          "is_leaf",
+          "estimated_time",
+          "actual_time",
+          "children"
+        ],
+        "properties": {
+          "task_id": { "type": "string" },
+          "parent_id": { "type": ["string", "null"] },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING", "IN_PROGRESS", "DONE", "BLOCKED", "SKIPPED"]
+          },
+          "is_leaf": { "type": "boolean" },
+          "estimated_time": { "type": "number" },
+          "actual_time": { "type": ["number", "null"] },
+          "children": {
             "type": "array",
-            "items": { "type": "string" },
-            "minItems": 1
+            "items": {
+              "$ref": "#/components/schemas/TaskNode"
+            }
           }
         }
       }

@@ -1,21 +1,21 @@
 {
-  "id": "scheduler",
+  "id": "planning",
   "version": "0.1.0",
   "runtime": "local-http",
-  "entry": { "command": "bin/scheduler-server", "args": [] },
+  "entry": { "command": "bin/planning-server", "args": [] },
   "api": {
-    "basePath": "/api/scheduler",
+    "basePath": "/api/planning",
     "health": { "method": "GET", "path": "/health" },
-    "events": { "transport": "sse", "path": "/api/scheduler/events" }
+    "events": { "transport": "websocket", "path": "/ws/tree" }
   },
   "capabilities": [
-    "task-decomposition",
-    "timeline-scheduling",
-    "task-storage",
-    "hierarchical-task-tree",
+    "cognitive-task-decomposition",
     "rolling-wave-planning",
-    "adaptive-replanning"
+    "hierarchical-task-tree",
+    "adaptive-replanning",
+    "execution-feedback-evaluation",
+    "websocket-tree-sync"
   ],
-  "events": ["task.created", "task.updated", "task.deleted", "timeline.changed"],
+  "events": ["NEW_TASK", "TASK_STATUS_UPDATED", "TREE_MUTATED"],
   "permissions": ["llm-api"]
 }

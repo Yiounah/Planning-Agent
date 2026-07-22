@@ -3,15 +3,6 @@
     "host": "127.0.0.1",
     "portEnv": "PORT"
   },
-  "storage": {
-    "dbPath": "memory://sya-task-tree"
-  },
-  "decompose": {
-    "maxSubtasks": 8,
-    "defaultEstimateMinutes": 30,
-    "includeBreaks": false,
-    "breakDurationMinutes": 5
-  },
   "planning": {
     "completionLowThreshold": 0.6,
     "completionHighThreshold": 0.9,

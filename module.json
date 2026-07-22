@@ -1,17 +1,16 @@
 {
-  "name": "scheduler",
-  "packageName": "@sya/function-scheduler",
+  "name": "planning",
+  "packageName": "@sya/function-planning",
   "visibility": "private",
-  "repository": "https://github.com/Yiounah/SYA-function-scheduler.git",
+  "repository": "git@github.com:<owner>/SYA-function-planning.git",
   "sourceAnchors": [
-    "function/scheduler/",
-    "function/scheduler/sya_task_scheduler/app/main.py",
-    "function/scheduler/sya_task_scheduler/app/core/cognitive_engine.py",
-    "function/scheduler/sya_task_scheduler/app/core/rolling_planner.py",
-    "function/scheduler/sya_task_scheduler/app/services/task_manager.py",
-    "app/src/features/scheduler/api.ts",
-    "app/src/pages/DashboardPage.tsx",
+    "function/planning/",
+    "function/planning/sya_task_scheduler/app/main.py",
+    "function/planning/sya_task_scheduler/app/core/cognitive_engine.py",
+    "function/planning/sya_task_scheduler/app/core/rolling_planner.py",
+    "function/planning/sya_task_scheduler/app/services/task_manager.py",
+    "app/src/features/planning/api.ts",
     "app/src/types/electron.d.ts"
   ],
-  "description": "AI task decomposition, scheduler-compatible task APIs, and rolling-wave planning for SYA."
+  "description": "Cognitive-aware dynamic task decomposition and rolling-wave planning function for SYA."
 }

@@ -1,4 +1,4 @@
-name: Scheduler Function CI
+name: Planning Function CI
 
 on:
   push:
@@ -13,10 +13,10 @@ jobs:
         with:
           python-version: "3.11"
       - run: python -m pip install -r sya_task_scheduler/requirements.txt
-      - run: chmod +x bin/scheduler-server scripts/*.sh
+      - run: chmod +x bin/planning-server scripts/*.sh
       - run: npm test
       - run: scripts/package-runtime.sh linux-x64
       - uses: actions/upload-artifact@v4
         with:
-          name: sya-function-scheduler-linux-x64
-          path: dist/sya-function-scheduler-*-linux-x64.tar.gz
+          name: sya-function-planning-linux-x64
+          path: dist/sya-function-planning-*-linux-x64.tar.gz
